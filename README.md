@@ -47,8 +47,7 @@ main();
 
 And this is the output of the previous code.
 
-```sh
-[nodemon] starting `npx ts-node ./src/index.ts`
+```
 The areon address of 0x123456f6Ed06F81eb1Edc6fccE34414E2C21fE5c is: areon1zg69dahdqmupav0dcm7vudzpfckzrljum4nsgt
 The balance of devToken at test net for 0xccd517c6f596512b7290040f58a6ddb492da7a9f, is: 50
 The number of AreonTestnetNft owned by 0xccd517c6f596512b7290040f58a6ddb492da7a9f, is: 6
