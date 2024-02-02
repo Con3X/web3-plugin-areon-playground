@@ -1,33 +1,63 @@
-# 🧰 web3-plugin-areon playground
+ 
+#  <img src="https://github.com/Con3X/web3-plugin-areon-playground/assets/24407834/70b9d570-1bcc-43c7-8ac1-d8c0f4acca5e" width="40" height="40"/> web3-plugin-areon playground
 
-A typescript-starter project to try web3-plugin-areon.
+A typescript-starter project to play with the package <a href="https://www.npmjs.com/package/@con3x/web3-plugin-areon/">web3-plugin-areon</a>.
 
-### Scripts
 
-#### `npm run start:dev`
+## To try the plugin
+- Clone this repo on your local machine. 
+- Run `yarn` and then `yarn start:dev` in the terminal and you will see the code output in the console. 
+- Open the file `/src/index.ts` to see and edit the code. And then save your changes to see the output of the new code in the console
 
-Starts the application in development using `nodemon` and `ts-node` to do hot reloading.
+## The code and the result
+If you would like to have a look before running the project on your machine, here simply the content of the file at `/src/index.ts`:
+```ts title="index.ts"
+import { Web3 } from 'web3';
+import { AddressConverter, AreonPlugin } from '@con3x/web3-plugin-areon';
 
-#### `npm run start`
+const areonAddress = AddressConverter.ethToAreon('0x123456f6Ed06F81eb1Edc6fccE34414E2C21fE5c');
 
-Starts the app in production by first building the project with `npm run build`, and then executing the compiled JavaScript at `build/index.js`.
+console.log('The areon address of 0x123456f6Ed06F81eb1Edc6fccE34414E2C21fE5c is:', areonAddress);
 
-#### `npm run build`
+// the following shows how to use the plugin
+// you can call any rpc method using the convention:
+// web3.areon.<network>.rpc.<namespace>.<method>
+async function main() {
+  const web3 = new Web3('https://testnet-rpc.areon.network');
+  web3.registerPlugin(new AreonPlugin());
 
-Builds the app at `build`, cleaning the folder first.
+  // to get the token balance of an account:
+  const devTokenContract = await web3.areon.Contracts.ARC20('0xb8082fa72bd534eb0fa124a0ea8fb9824356fd74');
+  const arc20balance = await devTokenContract.methods.balanceOf('0x6e994beb7015e68db2ce06fffe365e489f90b64d').call();
+  console.log(
+    'The balance of devToken at test net for 0xccd517c6f596512b7290040f58a6ddb492da7a9f, is:',
+    Web3.utils.fromWei(arc20balance, 'ether'),
+  );
 
-#### `npm run test`
+  // to get the number of nft owned by an account:
+  const numberOfNftOwned = await web3.areon.Contracts.ARC721('0x811abcac79de50cdf432462282e8c16eb4aca70d');
+  const nftNumber = await numberOfNftOwned.methods.balanceOf('0xccd517c6f596512b7290040f58a6ddb492da7a9f').call();
+  console.log(
+    'The number of AreonTestnetNft owned by 0xccd517c6f596512b7290040f58a6ddb492da7a9f, is:',
+    nftNumber.toString(),
+  );
+}
+main();
+```
 
-Runs the `jest` tests once.
+And this is the output of the previous code.
 
-#### `npm run test:dev`
+```sh
+[nodemon] starting `npx ts-node ./src/index.ts`
+The areon address of 0x123456f6Ed06F81eb1Edc6fccE34414E2C21fE5c is: areon1zg69dahdqmupav0dcm7vudzpfckzrljum4nsgt
+The balance of devToken at test net for 0xccd517c6f596512b7290040f58a6ddb492da7a9f, is: 50
+The number of AreonTestnetNft owned by 0xccd517c6f596512b7290040f58a6ddb492da7a9f, is: 6
+```
 
-Run the `jest` tests in watch mode, waiting for file changes.
+## Project Links
 
-#### `npm run prettier-format`
 
-Format your code.
-
-#### `npm run prettier-watch`
-
-Format your code in watch mode, waiting for file changes.
+- npm package: https://www.npmjs.com/package/@con3x/web3-plugin-areon/
+- GitHub repo: https://github.com/con3x/web3-plugin-areon
+- Playground (this repo): https://github.com/con3x/web3-plugin-areon-playground
+- Project website: www.web3areon.com
